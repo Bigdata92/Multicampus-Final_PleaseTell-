@@ -30,6 +30,12 @@
 # Epoch 17 : Loss 0.419722 / Loss(val) 1.757329
 # Epoch 18 : Loss 0.414604 / Loss(val) 1.762197
 # Epoch 19 : Loss 0.409950 / Loss(val) 1.773284
+# Epoch 20 : Loss 0.407022 / Loss(val) 1.766808
+# Epoch 21 : Loss 0.403701 / Loss(val) 1.771097
+# Epoch 22 : Loss 0.402197 / Loss(val) 1.769002
+# Epoch 23 : Loss 0.399222 / Loss(val) 1.776649
+
+
 
 # ------------------------ 모델 구현 파트 ------------------------ 
 

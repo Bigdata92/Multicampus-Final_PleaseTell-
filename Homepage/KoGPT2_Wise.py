@@ -11,7 +11,7 @@ def load_tokenizer(tokenizer_path):
     return tokenizer
 
 def generate_text(sequence, max_length):
-    model_path = 'C:/Workspace/python/빅데이터 지능형서비스 개발 팀프로젝트/Final Project/Data/IC_Data/Model_Data/KoGPT2/Branch_Diary'
+    model_path = 'C:\Workspace\python\빅데이터 지능형서비스 개발 팀프로젝트\Final Project\Data\IC_Data\Model_Data\KoGPT2\Wise'
     model = load_model(model_path)
     tokenizer = load_tokenizer(model_path)
     ids = tokenizer.encode(f'{sequence},', return_tensors = 'pt')

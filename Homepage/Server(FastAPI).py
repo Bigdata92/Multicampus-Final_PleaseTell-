@@ -15,6 +15,7 @@ import shutil
 import json
 import Captioning as cp
 import KoGPT2_Branch as kgb
+import KoGPT2_Wise as kgbw
 
 app = FastAPI()
 
@@ -40,7 +41,11 @@ async def testService(request : Request, img: UploadFile = File(...)):
     caption, _ = cp.evaluate(img_location)
     caption = ' '.join(caption[:-1])
 
-    sequence = kgb.result_sequence(caption, 128)
+    sequence_list = []
+    for _ in range(3):
+        sequence = kgbw.result_sequence(caption, 72)
+        sequence_list.append(sequence)
+    sequence = ' '.join(sequence_list)
 
     return templates.TemplateResponse("Service01(output).html", {"request": request, 'img' : img, 'img_name' : img_name,\
         'caption' : caption, 'sequence' : sequence})
