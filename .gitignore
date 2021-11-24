@@ -8,6 +8,8 @@ data/
 __pycache__/
 static/
 templates/
+yolov5/
+exp/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
