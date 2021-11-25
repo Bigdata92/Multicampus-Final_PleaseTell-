@@ -19,6 +19,7 @@ import KoGPT2_Wise as kgbw
 import KoGPT2_essay as kgbe
 import yolo5 as y5
 from hanspell import spell_checker
+import googletrans 
 
 app = FastAPI()
 
@@ -47,6 +48,9 @@ async def testService01_out01(request : Request, img: UploadFile = File(...), gp
         globals()['caption_' + f'{i}'] = caption.checked
 
     object_list = list(set(y5.yolo(img_location)))
+    translator = googletrans.Translator()   
+    for i in range(len(object_list)): 
+        object_list[i] = translator.translate(object_list[i], dest='ko').text
     object_list[0] = '# ' + object_list[0] 
     object_list = ' # '.join(object_list)
 
