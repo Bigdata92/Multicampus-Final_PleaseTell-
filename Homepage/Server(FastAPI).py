@@ -31,6 +31,10 @@ class Item(BaseModel):
 
 @app.get('/', response_class=HTMLResponse)
 async def home(request : Request) :
+    return templates.TemplateResponse("index.html", context={"request": request})
+
+@app.get('/service/', response_class=HTMLResponse)
+async def home(request : Request) :
     return templates.TemplateResponse("Service01(input).html", context={"request": request})
 
 @app.post("/service01_test01/", status_code = 201)
