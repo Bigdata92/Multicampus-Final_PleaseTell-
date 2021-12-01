@@ -10,7 +10,8 @@ from typing import List # 파일 여러 개 받기
 from pyngrok import ngrok
 import uvicorn
 import nest_asyncio
-from PIL.Image import Image
+from PIL import Image
+from PIL.ExifTags import TAGS
 import shutil
 import json
 import Captioning_Okt as cp
@@ -20,6 +21,7 @@ import KoGPT2_essay as kgbe
 import yolo5 as y5
 from hanspell import spell_checker
 import googletrans 
+
 
 app = FastAPI()
 
@@ -46,28 +48,48 @@ async def testService01_out01(request : Request, img: UploadFile = File(...), gp
         file_object.write(img.file.read())
     img = {'image': open(img_location, 'rb')}
 
+    try:
+        img = Image.open(img_location)
+        img_info = img._getexif();
+        img.close()
+        taglabel = dict()
+
+        for tag, value in img_info.items():
+            decoded = TAGS.get(tag, tag)
+            taglabel[decoded] = value
+
+        date_raw = taglabel['DateTime']
+        date_list = date_raw.split()
+        ymd = date_list[0]
+        date = '날짜 : ' + '. '.join(ymd.split(':'))
+    except:
+        date = '날짜 : 알 수없음'
+
     for i in range(1, 6):
         caption, _ = cp.evaluate(img_location)
         caption = spell_checker.check(' '.join(caption[:-1]))
         globals()['caption_' + f'{i}'] = caption.checked
 
     object_list = list(set(y5.yolo(img_location)))
-    translator = googletrans.Translator()   
-    for i in range(len(object_list)): 
-        object_list[i] = translator.translate(object_list[i], dest='ko').text
-    object_list[0] = '# ' + object_list[0] 
-    object_list = ' # '.join(object_list)
+    translator = googletrans.Translator()
+    if len(object_list) != 0:   
+        for i in range(len(object_list)): 
+            object_list[i] = translator.translate(object_list[i], dest='ko').text
+        object_list[0] = '# ' + object_list[0] 
+        object_list = ' # '.join(object_list)
+    else:
+        object_list = '# 태그값 없음'
 
     gptModel = gptModel
 
     context = {'request': request, 'img_name' : img_name, 'caption_1' : caption_1, 'caption_2' : caption_2, \
                 'caption_3' : caption_3, 'caption_4' : caption_4, 'caption_5' : caption_5, 'gptModel' : gptModel, \
-                'object_list' : object_list}
+                'object_list' : object_list, 'date' : date}
 
     return templates.TemplateResponse("Service01(output01).html", context)
 
 @app.post("/service01_test02/", status_code = 201)
-async def testService01_out02(request : Request, img_name: str = Form(...), caption: str = Form(...), gptModel: str = Form(...), object_list: str = Form(...)):
+async def testService01_out02(request : Request, img_name: str = Form(...), caption: str = Form(...), gptModel: str = Form(...), object_list: str = Form(...), date: str = Form(...)):
     path = 'C:/Workspace/python/빅데이터 지능형서비스 개발 팀프로젝트/Final Project/Homepage/static/images/Upload_Images/'
     img_name = img_name
     img_location = path + img_name
@@ -75,6 +97,7 @@ async def testService01_out02(request : Request, img_name: str = Form(...), capt
     caption = caption
     gptModel = gptModel
     object_list = object_list
+    date = date
 
     sequence_list = []
     if gptModel == '수필':
@@ -95,7 +118,7 @@ async def testService01_out02(request : Request, img_name: str = Form(...), capt
 
     context = {
         "request": request, 'caption' : caption, 'sequence' : sequence, 'img_name' : img_name, 'gptModel' : gptModel, \
-        'object_list' : object_list
+        'object_list' : object_list, 'date' : date
     }
 
     return templates.TemplateResponse("Service01(output02).html", context)
