@@ -15,9 +15,15 @@ from PIL.ExifTags import TAGS
 import shutil
 import json
 import Captioning_Okt as cp
-import KoGPT2_Branch as kgb
-import KoGPT2_Wise as kgbw
-import KoGPT2_essay as kgbe
+import Captioning_Okt as cp
+import KoGPT2_명언 as kgbw
+import KoGPT2_발라드 as kgbb
+import KoGPT2_수필 as kgbe
+import KoGPT2_시 as kgbp
+import KoGPT2_여행 as kgbv
+import KoGPT2_여행_비짓제주 as kgbj
+import KoGPT2_자유형식_브런치 as kgbd
+import KoGPT2_트로트 as kgbt
 import yolo5 as y5
 from hanspell import spell_checker
 import googletrans 
@@ -35,9 +41,25 @@ class Item(BaseModel):
 async def home(request : Request) :
     return templates.TemplateResponse("index.html", context={"request": request})
 
-@app.get('/service/', response_class=HTMLResponse)
-async def home(request : Request) :
-    return templates.TemplateResponse("Service01(input).html", context={"request": request})
+@app.get('/Service00/', response_class=HTMLResponse)
+async def service00(request : Request) :
+    return templates.TemplateResponse("Service00.html", context={"request": request})
+
+@app.get('/service01_ct01/', response_class=HTMLResponse)
+async def service_ct01(request : Request) :
+    return templates.TemplateResponse("Service01_ct01(input).html", context={"request": request})
+
+@app.get('/service01_ct02/', response_class=HTMLResponse)
+async def service_ct02(request : Request) :
+    return templates.TemplateResponse("Service01_ct02(input).html", context={"request": request})
+
+@app.get('/service01_ct03/', response_class=HTMLResponse)
+async def service_ct03(request : Request) :
+    return templates.TemplateResponse("Service01_ct03(input).html", context={"request": request})
+
+@app.get('/service01_ct04/', response_class=HTMLResponse)
+async def service_ct04(request : Request) :
+    return templates.TemplateResponse("Service01_ct04(input).html", context={"request": request})
 
 @app.post("/service01_test01/", status_code = 201)
 async def testService01_out01(request : Request, img: UploadFile = File(...), gptModel: str = Form(...)):
@@ -89,7 +111,8 @@ async def testService01_out01(request : Request, img: UploadFile = File(...), gp
     return templates.TemplateResponse("Service01(output01).html", context)
 
 @app.post("/service01_test02/", status_code = 201)
-async def testService01_out02(request : Request, img_name: str = Form(...), caption: str = Form(...), gptModel: str = Form(...), object_list: str = Form(...), date: str = Form(...)):
+async def testService01_out02(request : Request, img_name: str = Form(...), caption: str = Form(...), gptModel: str = Form(...), \
+                              object_list: str = Form(...), date: str = Form(...), sentence_length: int = Form(...)):
     path = 'C:/Workspace/python/빅데이터 지능형서비스 개발 팀프로젝트/Final Project/Homepage/static/images/Upload_Images/'
     img_name = img_name
     img_location = path + img_name
@@ -99,26 +122,56 @@ async def testService01_out02(request : Request, img_name: str = Form(...), capt
     object_list = object_list
     date = date
 
+    try:
+        sentence_length = sentence_length
+    except:
+        sentence_length = 2
+
     sequence_list = []
-    if gptModel == '수필':
-        for _ in range(2):
-            sequence = kgb.result_sequence(caption, 64)
-            sequence_list.append(sequence)
-        sequence = ' '.join(sequence_list)
     if gptModel == '명언':
-        for _ in range(2):
-            sequence = kgbw.result_sequence(caption, 64)
+        for _ in range(sentence_length):
+            sequence = kgbw.result_sequence(caption, 72)
             sequence_list.append(sequence)
         sequence = ' '.join(sequence_list)
-    if gptModel == '일기':
-        for _ in range(2):
-            sequence = kgb.result_sequence(caption, 64)
+    if gptModel == '발라드':
+        for _ in range(sentence_length):
+            sequence = kgbb.result_sequence(caption, 72)
+            sequence_list.append(sequence)
+        sequence = ' '.join(sequence_list)
+    if gptModel == '비짓제주':
+        for _ in range(sentence_length):
+            sequence = kgbj.result_sequence(caption, 72)
+            sequence_list.append(sequence)
+        sequence = ' '.join(sequence_list)
+    if gptModel == '트로트':
+        for _ in range(sentence_length):
+            sequence = kgbt.result_sequence(caption, 72)
+            sequence_list.append(sequence)
+        sequence = ' '.join(sequence_list)
+    if gptModel == '시':
+        for _ in range(sentence_length):
+            sequence = kgbp.result_sequence(caption, 72)
+            sequence_list.append(sequence)
+        sequence = ' '.join(sequence_list)
+    if gptModel == '여행':
+        for _ in range(sentence_length):
+            sequence = kgbv.result_sequence(caption, 72)
+            sequence_list.append(sequence)
+        sequence = ' '.join(sequence_list)
+    if gptModel == '수필':
+        for _ in range(sentence_length):
+            sequence = kgbe.result_sequence(caption, 72)
+            sequence_list.append(sequence)
+        sequence = ' '.join(sequence_list)
+    if gptModel == '일상일기':
+        for _ in range(sentence_length):
+            sequence = kgbd.result_sequence(caption, 72)
             sequence_list.append(sequence)
         sequence = ' '.join(sequence_list)
 
     context = {
         "request": request, 'caption' : caption, 'sequence' : sequence, 'img_name' : img_name, 'gptModel' : gptModel, \
-        'object_list' : object_list, 'date' : date
+        'object_list' : object_list, 'date' : date, 'sentence_length' : sentence_length
     }
 
     return templates.TemplateResponse("Service01(output02).html", context)
