@@ -20,7 +20,7 @@ def generate_text(sequence, max_length):
         do_sample = True,
         max_length = max_length,
         pad_token_id = model.config.pad_token_id,
-        tok_k = 5, # 가장 높은 확률을 지닌 n개의 단어수 중에서 추출
+        top_k = 5, # 가장 높은 확률을 지닌 n개의 단어수 중에서 추출
         top_p = 0.90, # 누적확률이 n%인 단어까지 포함하여 그 중에서 추출
         no_repeat_ngram_size = 3,
         repetition_penalty = 1.5, # 단어사용 반복에 대한 패널티 부여
@@ -42,5 +42,5 @@ def result_sequence(sequence, max_length):
         sequence6 = ' '.join(sequence5.split('. '))
     else:
         sequence6 = ' '.join(sequence5.split('. ')[:-1])
-    sequence7 = re.sub('[^ㄱ-ㅎㅏ-ㅣ가-힣0-9,. ]', '', spell_check(sequence6)).replace('  ', ' ').replace('  ', ' ').replace('  ', ' ').replace('  ', ' ')
+    sequence7 = re.sub('[^ㄱ-ㅎㅏ-ㅣ가-힣. ]', '', spell_check(sequence6)).replace('  ', ' ').replace('  ', ' ').replace('  ', ' ').replace('  ', ' ')
     return sequence7
