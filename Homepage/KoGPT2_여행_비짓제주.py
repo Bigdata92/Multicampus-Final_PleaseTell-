@@ -42,5 +42,5 @@ def result_sequence(sequence, max_length):
         sequence6 = ' '.join(sequence5.split('. '))
     else:
         sequence6 = ' '.join(sequence5.split('. ')[:-1])
-    sequence7 = re.sub('[^ㄱ-ㅎㅏ-ㅣ가-힣. ]', '', spell_check(sequence6)).replace('  ', ' ').replace('  ', ' ').replace('  ', ' ').replace('  ', ' ')
+    sequence7 = re.sub('[^ㄱ-ㅎㅏ-ㅣ가-힣0-9,. ]', '', spell_check(sequence6)).replace('  ', ' ').replace('  ', ' ').replace('  ', ' ').replace('  ', ' ')
     return sequence7
