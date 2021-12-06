@@ -34,7 +34,7 @@ def spell_check(sequence):
 
 def result_sequence(sequence, max_length):
     sequence1 = generate_text(sequence, max_length)
-    sequence2 = sequence1.split(f'{sequence},')[1]
+    sequence2 = ' '.join(sequence1.split(f'{sequence},'))
     sequence3 = spell_check(sequence2)
     sequence4 = sequence3.replace('  ', ' ').replace('  ', ' ').replace('  ', ' ').replace('  ', ' ')
     sequence5 =  sequence4.replace('. ', '.. ')
