@@ -82,7 +82,7 @@
 19. 비짓제주 / https://www.visitjeju.net/kr
 20. FASTAPI / https://fastapi.tiangolo.com/
 
-**※ 관련코드들은 최종코드에서 확인하시고, 홈페이지 및 테스트 서비스 관련 파일들은 Homepage폴더를 참조하시기 바랍니다.**
+**※ 관련 코드가 궁금하시면 최종코드폴더 및 Homepage폴더를 참조하시기 바랍니다.**
 
 
 
