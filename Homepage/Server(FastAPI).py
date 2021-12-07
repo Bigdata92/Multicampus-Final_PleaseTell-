@@ -72,15 +72,23 @@ async def testService01_out01(request : Request, img: UploadFile = File(...), gp
     img = {'image': open(img_location, 'rb')}
 
     try:
-        date = PI.photo_time(img_location)
+        date, ymd_result = PI.photo_time(img_location)
     except:
-        date = '날짜 : 알 수없음'
+        date, ymd_result = '알 수없음', '알 수없음.'
 
     try:
         key_filepath = 'C:/Workspace/python/빅데이터 지능형서비스 개발 팀프로젝트/Final Project/Data/mapkey.txt'
-        sido, si, do = PI.photo_location(img_location, key_filepath)
+        sido, sido1, sido2 = PI.photo_location(img_location, key_filepath)
     except:
-        sido, si, do = '알 수없음', '알 수없음', '알 수없음'
+        sido, sido1, sido2 = '알 수없음', '알 수없음', '알 수없음'
+
+    key_filepath_w = 'C:/Workspace/python/빅데이터 지능형서비스 개발 팀프로젝트/Final Project/Data/weather.txt'
+    try:
+        maxTa, avgTa, minTa, sumRn, avgRhm = PI.photo_weather(key_filepath_w, sido, ymd_result)
+        weather_Info1 = f'{avgTa}(평균기온) / {sumRn}(강수량)'
+    except:
+        maxTa, avgTa, minTa, sumRn, avgRhm = '알 수 없음', '알 수 없음', '알 수 없음', '알 수 없음', '알 수 없음'
+        weather_Info1 = '알 수없음'
 
     for i in range(1, 6):
         caption, _ = cp.evaluate(img_location)
@@ -101,13 +109,16 @@ async def testService01_out01(request : Request, img: UploadFile = File(...), gp
 
     context = {'request': request, 'img_name' : img_name, 'caption_1' : caption_1, 'caption_2' : caption_2, \
                 'caption_3' : caption_3, 'caption_4' : caption_4, 'caption_5' : caption_5, 'gptModel' : gptModel, \
-                'object_list' : object_list, 'date' : date, 'sido' : sido, 'si' : si, 'do' : do}
+                'object_list' : object_list, 'date' : date, 'sido' : sido, 'sido1' : sido1, 'sido2' : sido2, \
+                'weather_Info1' : weather_Info1
+                    }
 
     return templates.TemplateResponse("Service01(output01).html", context)
 
 @app.post("/service01_test02/", status_code = 201)
 async def testService01_out02(request : Request, img_name: str = Form(...), caption: str = Form(...), gptModel: str = Form(...), \
-                              object_list: str = Form(...), date: str = Form(...), sentence_length: int = Form(...), sido: str = Form(...)):
+                              object_list: str = Form(...), date: str = Form(...), sentence_length: int = Form(...), \
+                              sido: str = Form(...), weather_Info1: str = Form(...)):
     path = 'C:/Workspace/python/빅데이터 지능형서비스 개발 팀프로젝트/Final Project/Homepage/static/images/Upload_Images/'
     img_name = img_name
     img_location = path + img_name
@@ -117,6 +128,7 @@ async def testService01_out02(request : Request, img_name: str = Form(...), capt
     object_list = object_list
     date = date
     sido = sido
+    weather_Info1 = weather_Info1 
 
     try:
         sentence_length = sentence_length
@@ -202,7 +214,8 @@ async def testService01_out02(request : Request, img_name: str = Form(...), capt
 
     context = {
         "request": request, 'caption' : caption, 'sequence' : sequence, 'img_name' : img_name, 'gptModel' : gptModel, \
-        'object_list' : object_list, 'date' : date, 'sentence_length' : sentence_length, 'sido' : sido
+        'object_list' : object_list, 'date' : date, 'sentence_length' : sentence_length, 'sido' : sido, \
+        'weather_Info1' : weather_Info1, 'result_sequence' : result_sequence
     }
 
     return templates.TemplateResponse("Service01(output02).html", context)
