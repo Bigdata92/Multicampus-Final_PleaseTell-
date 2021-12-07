@@ -6,10 +6,16 @@ password.txt
 Data/
 data/
 __pycache__/
-static/
-templates/
+assets/
+css/
+images/
+webfonts/
 yolov5/
 exp/
+sass/
+js/
+static/
+templates/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
