@@ -85,7 +85,7 @@ async def testService01_out01(request : Request, img: UploadFile = File(...), gp
     key_filepath_w = 'C:/Workspace/python/빅데이터 지능형서비스 개발 팀프로젝트/Final Project/Data/weather.txt'
     try:
         maxTa, avgTa, minTa, sumRn, avgRhm = PI.photo_weather(key_filepath_w, sido, ymd_result)
-        weather_Info1 = f'{avgTa}(평균기온) / {sumRn}(강수량)'
+        weather_Info1 = f'{avgTa}°C(평균기온) / {sumRn}mm(강수량)'
     except:
         maxTa, avgTa, minTa, sumRn, avgRhm = '알 수 없음', '알 수 없음', '알 수 없음', '알 수 없음', '알 수 없음'
         weather_Info1 = '알 수없음'
@@ -153,7 +153,7 @@ async def testService01_out02(request : Request, img_name: str = Form(...), capt
         result = result.replace('.', '. ').replace(' .', ' ').replace('  ', ' ').replace('  ', ' ')
         return result
 
-    length = 64
+    length = 48
     result = caption
     if gptModel == '명언':
         for _ in range(sentence_length):
