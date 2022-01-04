@@ -1,6 +1,6 @@
 # 빅데이터 지능형서비스 개발과정 팀프로젝트(2)
 
-## 멀티캠퍼스, 서울
+## 삼성 멀티캠퍼스, 서울
 
 ### 기간 : 21. 10. 29(금) ~ 12. 9(목)
 
@@ -81,8 +81,6 @@
 18. 대한민국 구석구석 / https://korean.visitkorea.or.kr/main/main.do#home
 19. 비짓제주 / https://www.visitjeju.net/kr
 20. FASTAPI / https://fastapi.tiangolo.com/
-
-**※ 관련 코드가 궁금하시면 최종코드폴더 및 Homepage폴더를 참조하시기 바랍니다.**
 
 
 
